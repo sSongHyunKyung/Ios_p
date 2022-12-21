@@ -86,6 +86,7 @@
 		8E61A8B82949BE0500264308 /* CustomUILabelR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUILabelR.swift; sourceTree = "<group>"; };
 		8E61A8BA2949C08600264308 /* CustomUILabelL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUILabelL.swift; sourceTree = "<group>"; };
 		8E61A8BD294A141200264308 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		8ECB7398295291E000AA84D8 /* Empty.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Empty.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +154,7 @@
 				8E4C9A4629416BDA00A63BAD /* Assets.xcassets */,
 				8E4C9A4829416BDA00A63BAD /* LaunchScreen.storyboard */,
 				8E4C9A4B29416BDA00A63BAD /* Info.plist */,
+				8ECB7397295291AA00AA84D8 /* Seiri */,
 			);
 			path = gngS__;
 			sourceTree = "<group>";
@@ -261,6 +263,14 @@
 				8E61A8BD294A141200264308 /* WebViewController.swift */,
 			);
 			path = WebView;
+			sourceTree = "<group>";
+		};
+		8ECB7397295291AA00AA84D8 /* Seiri */ = {
+			isa = PBXGroup;
+			children = (
+				8ECB7398295291E000AA84D8 /* Empty.md */,
+			);
+			path = Seiri;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

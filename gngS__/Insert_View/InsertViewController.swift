@@ -392,6 +392,7 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
         //VC連結data移動
         guard let inputVc = self.storyboard?.instantiateViewController(withIdentifier: "InputViewController") as? InputViewController else {return}
         inputVc.empII = empI
+        //closer呼ぶ
         inputVc.didSave = {
             //tabbarChagne
             self.tabBarController!.selectedIndex = 0
@@ -723,9 +724,15 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
         let cancelItem2 = UIBarButtonItem(title:"キャンセル", style: .done, target: self, action: #selector(cancel2))
         toolbar2.setItems([cancelItem2, spaceItem2, doneItem2], animated: true)
         
+        let toolbar3 = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
+        let spaceItem3 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let doneItem3 = UIBarButtonItem(title:"完了", style: .done, target: self, action: #selector(done3))
+        toolbar3.setItems([spaceItem3, doneItem3], animated: true)
+        
         // toolbar 実装
         positionTextField.inputAccessoryView = toolbar
         teamTextField.inputAccessoryView = toolbar2
+        memoTextView.inputAccessoryView = toolbar3
         
     }
     
@@ -750,6 +757,10 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
     @objc func cancel2(){
         teamTextField.endEditing(true)
         //print("-----------\(teamTextField.text!)---------------")
+    }
+    
+    @objc func done3() {
+        memoTextView.endEditing(true)
     }
     
     
@@ -991,14 +1002,14 @@ extension InsertViewController: UITextFieldDelegate {
 extension InsertViewController: UITextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        // テキストフィールドの編集が開始された時に実行される処理。
-        // どのテキストフィールドが編集中か保存しておく。
+        // テキストviewの編集が開始された時に実行される処理。
+        // どのテキストviewが編集中か保存しておく。
         editingTextView = textView
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
-        // テキストフィールドの編集が終了した時に実行される処理。
-        // 編集中のテキストフィールドをnilにする。
+        // テキストviewの編集が終了した時に実行される処理。
+        // 編集中のテキストviewドをnilにする。
         editingTextView = nil
     }
 }

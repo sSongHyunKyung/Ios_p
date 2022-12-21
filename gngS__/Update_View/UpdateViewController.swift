@@ -285,6 +285,8 @@ class UpdateViewController: UIViewController,UIPickerViewDelegate, UIPickerViewD
         dismiss(animated: true)
     }
     
+    
+    //MARK: PickerView
     //PickerView フォルパティ
     var posPicker:UIPickerView = UIPickerView()
     var teamPicker:UIPickerView = UIPickerView()
@@ -347,9 +349,16 @@ class UpdateViewController: UIViewController,UIPickerViewDelegate, UIPickerViewD
         let cancelItem2 = UIBarButtonItem(title:"キャンセル", style: .done, target: self, action: #selector(cancel2))
         toolbar2.setItems([cancelItem2, spaceItem2, doneItem2], animated: true)
         
+        
+        let toolbar3 = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
+        let spaceItem3 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let doneItem3 = UIBarButtonItem(title:"完了", style: .done, target: self, action: #selector(done3))
+        toolbar3.setItems([spaceItem3, doneItem3], animated: true)
+        
         // toolbar 実装
         positionTextField.inputAccessoryView = toolbar
         teamTextField.inputAccessoryView = toolbar2
+        memoTextView.inputAccessoryView = toolbar3
     }
     
     // 決定ボタンのアクション指定
@@ -375,7 +384,9 @@ class UpdateViewController: UIViewController,UIPickerViewDelegate, UIPickerViewD
         //print("-----------\(teamTextField.text!)---------------")
     }
     
-    
+    @objc func done3() {
+        memoTextView.endEditing(true)
+    }
     
     //MARK: change関数
     
