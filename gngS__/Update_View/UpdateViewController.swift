@@ -625,9 +625,73 @@ extension UpdateViewController: UITextFieldDelegate {
         // 改行コードは入力しない。
         return false
     }
-}
-extension UpdateViewController: UITextViewDelegate {
     
+    
+    
+    //MARK: Textfield 文字制限
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        //BackSpace機能
+        if let char = string.cString(using: String.Encoding.utf8) {
+            let isBackSpace = strcmp(char, "\\b")
+            if isBackSpace == -92 {
+                return true
+            }
+        }
+        //文字制限//
+        switch(textField.text) {
+            
+        case kanjiTextField.text:
+                let numChar = CharacterSet(charactersIn: "1234567890")
+                guard string.rangeOfCharacter(from: numChar) == nil else { return false }
+        case kanaTextField.text:
+                let numChar = CharacterSet(charactersIn: "1234567890")
+                guard string.rangeOfCharacter(from: numChar) == nil else { return false }
+        case engTextField.text:
+                let numChar = CharacterSet(charactersIn: "1234567890")
+                guard string.rangeOfCharacter(from: numChar) == nil else { return false }
+        case FirstTel.text:
+                let numChar = CharacterSet(charactersIn: "1234567890")
+                guard string.rangeOfCharacter(from: numChar) != nil else { return false }
+        case SecondTel.text:
+                let numChar = CharacterSet(charactersIn: "1234567890")
+                guard string.rangeOfCharacter(from: numChar) != nil else { return false }
+        case ThirdTel.text:
+                let numChar = CharacterSet(charactersIn: "1234567890")
+                guard string.rangeOfCharacter(from: numChar) != nil else { return false }
+            default:
+                break
+            }
+        
+        var maxLength:Int = 0
+        
+        switch (textField.text) {
+        case kanjiTextField.text: //KANJI
+            maxLength = 30
+        case kanaTextField.text: //KANA
+            maxLength = 30
+        case engTextField.text: //ENG
+            maxLength = 30
+        case FirstTel.text: //TEL1
+            maxLength = 4
+        case SecondTel.text: //TEL2
+            maxLength = 4
+        case ThirdTel.text: //TEL3
+            maxLength = 4
+        default:
+            break
+        }
+        
+        let textFiledinPut = textField.text?.count ?? 0
+        let stringNum = string.count
+        return textFiledinPut + stringNum <= maxLength
+        
+    }
+
+}
+
+
+extension UpdateViewController: UITextViewDelegate {
+        
     func textViewDidBeginEditing(_ textView: UITextView) {
         // テキストフィールドの編集が開始された時に実行される処理。
         // どのテキストフィールドが編集中か保存しておく。
@@ -639,43 +703,6 @@ extension UpdateViewController: UITextViewDelegate {
         // 編集中のテキストフィールドをnilにする。
         editingTextView = nil
     }
-    //Textfield 文字数制限
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        var maxLength:Int = 0
-        
-        switch (textField.tag) {
-
-        case 1: //KANJI
-            maxLength = 30
-            
-        case 2: //KANA
-            maxLength = 30
-            
-        case 3: //ENG
-            maxLength = 30
-            
-        case 4: //TEL1
-            maxLength = 4
-            
-        case 5: //TEL2
-            maxLength = 4
-            
-        case 6: //TEL3
-            maxLength = 4
-         
-        default:
-            break
-        }
-        
-        let textFiledinPut = textField.text?.count ?? 0
-        let stringNum = string.count
-        
-        return textFiledinPut + stringNum <= maxLength
-    }
-    
-    
-    
 }
 
 

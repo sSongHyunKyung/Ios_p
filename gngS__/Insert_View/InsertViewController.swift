@@ -278,14 +278,6 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
             self.present(alert, animated: true, completion: nil)
             return
         }
-        if tel1.count > 4 {
-            let alert = UIAlertController(title: "", message: "電話番号を確認してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
         
         if tel2.isEmpty {
             let alert = UIAlertController(title: "", message: "電話番号を入力ください", preferredStyle: .alert)
@@ -295,25 +287,9 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
             self.present(alert, animated: true, completion: nil)
             return
         }
-        if tel2.count > 4 {
-            let alert = UIAlertController(title: "", message: "電話番号を確認してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
         
         if tel3.isEmpty {
             let alert = UIAlertController(title: "", message: "電話番号を入力ください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        if tel3.count > 4 {
-            let alert = UIAlertController(title: "", message: "電話番号を確認してください", preferredStyle: .alert)
             let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
             })
             alert.addAction(ok)
@@ -397,7 +373,24 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
             //tabbarChagne
             self.tabBarController!.selectedIndex = 0
             //insertView 生成　self.ViewDidLoad()また始める
-            self.loadView()
+            //self.loadView()
+            self.idTextField.text = ""
+            self.pwTextField.text = ""
+            self.rePwTextField.text = ""
+            self.kanjiTextField.text = ""
+            self.kanaTextField.text = ""
+            self.engTextField.text = ""
+            self.FirstTelTextField.text = ""
+            self.SecondTelTextField.text = ""
+            self.ThirdTextField.text = ""
+            self.girlBtn.setImage(UIImage(named: "radio_off"), for: .normal)
+            self.manBtn.setImage(UIImage(named: "radio_off"), for: .normal)
+            self.positionTextField.text = ""
+            self.teamTextField.text = ""
+            self.megazineSwitch.isOn = false
+            self.agreeBtn.setImage(UIImage(systemName: "square"), for: .normal)
+            self.memoTextView.text = ""
+            self.scrollView.contentOffset.y = 0
         }
         inputVc.modalPresentationStyle = .fullScreen
         self.present(inputVc, animated: true, completion: nil)
@@ -644,11 +637,29 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
             //tabbarChagne
             self.tabBarController!.selectedIndex = 0
             //insertView 生成　self.ViewDidLoad()また始める
-            self.loadView()
+            //self.loadView()
+            self.idTextField.text = ""
+            self.pwTextField.text = ""
+            self.rePwTextField.text = ""
+            self.kanjiTextField.text = ""
+            self.kanaTextField.text = ""
+            self.engTextField.text = ""
+            self.FirstTelTextField.text = ""
+            self.SecondTelTextField.text = ""
+            self.ThirdTextField.text = ""
+            self.girlBtn.setImage(UIImage(named: "radio_off"), for: .normal)
+            self.manBtn.setImage(UIImage(named: "radio_off"), for: .normal)
+            self.positionTextField.text = ""
+            self.teamTextField.text = ""
+            self.megazineSwitch.isOn = false
+            self.agreeBtn.setImage(UIImage(systemName: "square"), for: .normal)
+            self.memoTextView.text = ""
+            self.scrollView.contentOffset.y = 0
         }
         inputVc.modalPresentationStyle = .fullScreen
         self.present(inputVc, animated: true, completion: nil)
     }
+    
     //MARK: PickerView
     
     //pickerViewFieldAction
@@ -1035,45 +1046,91 @@ extension InsertViewController: UIScrollViewDelegate {
     }
     
         
+    //MARK: TextField制限
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
+        //BackSpace機能
+        if let char = string.cString(using: String.Encoding.utf8) {
+            let isBackSpace = strcmp(char, "\\b")
+            if isBackSpace == -92 {
+                return true
+            }
+        }
+        
+        //英語,数字,@,-,_,.のみ入力 or Tel= 数字のみ//
+        switch(textField.text) {
+        
+        case idTextField.text:
+                let allowedCharacters = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_@-.") // 入力可能な文字
+                guard string.rangeOfCharacter(from: allowedCharacters) != nil else { return false }
+        case pwTextField.text:
+                let numChar = CharacterSet(charactersIn: "")
+                guard string.rangeOfCharacter(from: numChar) == nil else { return false }
+        case rePwTextField.text:
+                let numChar = CharacterSet(charactersIn: "")
+                guard string.rangeOfCharacter(from: numChar) == nil else { return false }
+        case kanjiTextField.text:
+                let numChar = CharacterSet(charactersIn: "1234567890")
+                guard string.rangeOfCharacter(from: numChar) == nil else { return false }
+        case kanaTextField.text:
+                let numChar = CharacterSet(charactersIn: "1234567890")
+                guard string.rangeOfCharacter(from: numChar) == nil else { return false }
+        case engTextField.text:
+                let numChar = CharacterSet(charactersIn: "1234567890")
+                guard string.rangeOfCharacter(from: numChar) == nil else { return false }
+        case FirstTelTextField.text:
+                let numChar = CharacterSet(charactersIn: "1234567890")
+                guard string.rangeOfCharacter(from: numChar) != nil else { return false }
+        case SecondTelTextField.text:
+                let numChar = CharacterSet(charactersIn: "1234567890")
+                guard string.rangeOfCharacter(from: numChar) != nil else { return false }
+        case ThirdTextField.text:
+                let numChar = CharacterSet(charactersIn: "1234567890")
+                guard string.rangeOfCharacter(from: numChar) != nil else { return false }
+            default:
+                break
+        }
+        
+        
+        
+        //TextField Length制限
         var maxLength:Int = 0
         
-        switch (textField.tag) {
-        case 1: //ID
+        switch (textField.text) {
+        case idTextField.text: //ID
             maxLength = 30
         
-        case 2: //PW
+        case pwTextField.text: //PW
             maxLength = 30
             
-        case 3: //REPW
+        case rePwTextField.text: //REPW
             maxLength = 30
             
-        case 4: //KANJI
+        case kanjiTextField.text: //KANJI
             maxLength = 30
             
-        case 5: //KANA
+        case kanaTextField.text: //KANA
             maxLength = 30
             
-        case 6: //ENG
+        case engTextField.text: //ENG
             maxLength = 30
             
-        case 7: //TEL1
+        case FirstTelTextField.text: //TEL1
             maxLength = 4
             
-        case 8: //TEL2
+        case SecondTelTextField.text: //TEL2
             maxLength = 4
             
-        case 9: //TEL3
+        case ThirdTextField.text: //TEL3
             maxLength = 4
          
         default:
             break
         }
         
+        //Length
         let textFiledinPut = textField.text?.count ?? 0
         let stringNum = string.count
-        
         return textFiledinPut + stringNum <= maxLength
     }
     
