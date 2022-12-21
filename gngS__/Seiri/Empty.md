@@ -61,3 +61,5 @@
     ・ネビガイションbar機能実装
      - 上でScrollをすればbarが出る下でScrollをすればbarが隠れる
 　　　- Backbtn,Prebtn,reload btn 機能実装
+
+ 
