@@ -7,17 +7,17 @@ class InputViewController: UIViewController {
         super.viewDidLoad()
         
         //labelに入る
-        idLabel.text = empII.EmployeeId
-        kanjiLabel.text = empII.EmployeeKanji
-        kanaLabel.text = empII.EmployeeKana
-        engLabel.text = empII.EmployeeEng
-        telLabel.text = empII.Tel
-        positionLabel.text = empII.Position
-        teamLabel.text = empII.Team
-        genderLabel.text = returnGender(num: empII.Gender)
-        megazineLabel.text = returnMegazie(num: empII.Megazine)
-        agreeLabel.text = returnAgree(num: empII.Agree)
-        memoLabel.text = empII.Memo
+        idLabel.text = empII.employeeId
+        kanjiLabel.text = empII.employeeKanji
+        kanaLabel.text = empII.employeeKana
+        engLabel.text = empII.employeeEng
+        telLabel.text = empII.tel
+        positionLabel.text = empII.position
+        teamLabel.text = empII.team
+        genderLabel.text = returnGender(num: empII.gender)
+        megazineLabel.text = returnMegazie(num: empII.megazine)
+        agreeLabel.text = returnAgree(num: empII.agree)
+        memoLabel.text = empII.memo
         
         //inputBtn1.addTarget(self, action: #selector(method), for: .touchUpInside)
         
@@ -58,24 +58,24 @@ class InputViewController: UIViewController {
         guard let empF = self.empII else { return }
         let loginF = Login()
         
-        empF.EmployeeNum = empII.EmployeeNum
-        empF.EmployeeId = empII.EmployeeId
-        empF.EmployeePw = empII.EmployeePw
-        empF.EmployeeKanji = empII.EmployeeKanji
-        empF.EmployeeKana = empII.EmployeeKana
-        empF.EmployeeEng = empII.EmployeeEng
-        empF.Tel = empII.Tel
-        empF.Gender = empII.Gender
-        empF.Position = returnPosition2(code: empII.Position)
-        empF.Team = returnTeam2(code: empII.Team)
-        empF.Agree = empII.Agree
-        empF.Megazine = empII.Megazine
-        empF.Memo = empII.Memo
-        empF.RegisterDate = registerDate
+        empF.employeeNum = empII.employeeNum
+        empF.employeeId = empII.employeeId
+        empF.employeePw = empII.employeePw
+        empF.employeeKanji = empII.employeeKanji
+        empF.employeeKana = empII.employeeKana
+        empF.employeeEng = empII.employeeEng
+        empF.tel = empII.tel
+        empF.gender = empII.gender
+        empF.position = returnPosition2(code: empII.position)
+        empF.team = returnTeam2(code: empII.team)
+        empF.agree = empII.agree
+        empF.megazine = empII.megazine
+        empF.memo = empII.memo
+        empF.registerDate = registerDate
         
-        loginF.EmployeeNum = empII.EmployeeNum
-        loginF.EmployeeId = empII.EmployeeId
-        loginF.EmployeePw = empII.EmployeePw
+        loginF.employeeNum = empII.employeeNum
+        loginF.employeeId = empII.employeeId
+        loginF.employeePw = empII.employeePw
     
         //INSERT 実行
         DB.shared.insertEmployee2(employee: [empF])
@@ -94,16 +94,16 @@ class InputViewController: UIViewController {
     //MARK: 外関数
     func returnPosition2(code:String) -> String {
         for postion in pos {
-            if code == postion.PositionName {
-                return postion.PositionCode
+            if code == postion.name {
+                return postion.code
             }
         }
         return ""
     }
     func returnTeam2(code:String) -> String {
         for team in teams {
-            if code == team.TeamName {
-                return team.TeamCode
+            if code == team.name {
+                return team.code
             }
         }
         return ""

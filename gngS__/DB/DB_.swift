@@ -129,14 +129,14 @@ class DB {
                 print("insert error: \(DBErrorMsg(db))")
                 return
             }
-            sqlite3_bind_text(insertStmt, 1, (data.EmployeeNum as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStmt, 2, (data.EmployeeId as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStmt, 3, (data.EmployeePw as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 1, (data.employeeNum as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 2, (data.employeeId as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 3, (data.employeePw as NSString).utf8String, -1, nil)
             
-            if data.LastLogin == "" {
+            if data.lastLogin == "" {
                 sqlite3_bind_null(insertStmt, 4)
             } else {
-                sqlite3_bind_text(insertStmt, 4, (data.LastLogin as NSString).utf8String, -1, nil)
+                sqlite3_bind_text(insertStmt, 4, (data.lastLogin as NSString).utf8String, -1, nil)
             }
             
             
@@ -162,13 +162,13 @@ class DB {
                 return
             }
             
-            sqlite3_bind_text(insertStmt, 1, (data.EmployeeId as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStmt, 2, (data.EmployeePw as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 1, (data.employeeId as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 2, (data.employeePw as NSString).utf8String, -1, nil)
             
-            if data.LastLogin == "" {
+            if data.lastLogin == "" {
                 sqlite3_bind_null(insertStmt, 3)
             } else {
-                sqlite3_bind_text(insertStmt, 3, (data.LastLogin as NSString).utf8String, -1, nil)
+                sqlite3_bind_text(insertStmt, 3, (data.lastLogin as NSString).utf8String, -1, nil)
             }
             
             if sqlite3_step(insertStmt) != SQLITE_DONE {
@@ -202,30 +202,30 @@ class DB {
 //                data.EmployeeNum = empNum
 //               // empNum = String(Int(empNum)! + 1)
 //            } else {
-            sqlite3_bind_text(insertStmt, 1, (data.EmployeeNum as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 1, (data.employeeNum as NSString).utf8String, -1, nil)
             //}
-            sqlite3_bind_text(insertStmt, 2, (data.EmployeeId as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStmt, 3, (data.EmployeePw as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStmt, 4, (data.EmployeeKanji as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStmt, 5, (data.EmployeeKana as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStmt, 6, (data.EmployeeEng as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStmt, 7, (data.Tel as NSString).utf8String, -1, nil)
-            sqlite3_bind_int(insertStmt, 8, Int32(data.Gender))
-            sqlite3_bind_text(insertStmt, 9, (data.Position as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStmt, 10, (data.Team as NSString).utf8String, -1, nil)
-            sqlite3_bind_int(insertStmt, 11, Int32(data.Agree))
-            sqlite3_bind_int(insertStmt, 12, Int32(data.Megazine))
+            sqlite3_bind_text(insertStmt, 2, (data.employeeId as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 3, (data.employeePw as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 4, (data.employeeKanji as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 5, (data.employeeKana as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 6, (data.employeeEng as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 7, (data.tel as NSString).utf8String, -1, nil)
+            sqlite3_bind_int(insertStmt, 8, Int32(data.gender))
+            sqlite3_bind_text(insertStmt, 9, (data.position as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 10, (data.team as NSString).utf8String, -1, nil)
+            sqlite3_bind_int(insertStmt, 11, Int32(data.agree))
+            sqlite3_bind_int(insertStmt, 12, Int32(data.megazine))
          
-            if data.Memo == "" {
+            if data.memo == "" {
                 sqlite3_bind_null(insertStmt, 13)
             } else {
-                sqlite3_bind_text(insertStmt, 13, (data.Memo as NSString).utf8String, -1, nil)
+                sqlite3_bind_text(insertStmt, 13, (data.memo as NSString).utf8String, -1, nil)
             }
             
-            if data.RegisterDate == "" {
+            if data.registerDate == "" {
                 sqlite3_bind_null(insertStmt, 14)
             } else {
-                sqlite3_bind_text(insertStmt, 14, (data.RegisterDate as NSString).utf8String, -1, nil)
+                sqlite3_bind_text(insertStmt, 14, (data.registerDate as NSString).utf8String, -1, nil)
             }
                              
             if sqlite3_step(insertStmt) != SQLITE_DONE {
@@ -253,28 +253,28 @@ class DB {
                 return
             }
     
-            sqlite3_bind_text(insertStmt, 1, (data.EmployeeId as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStmt, 2, (data.EmployeePw as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStmt, 3, (data.EmployeeKanji as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStmt, 4, (data.EmployeeKana as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStmt, 5, (data.EmployeeEng as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStmt, 6, (data.Tel as NSString).utf8String, -1, nil)
-            sqlite3_bind_int(insertStmt, 7, Int32(data.Gender))
-            sqlite3_bind_text(insertStmt, 8, (data.Position as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStmt, 9, (data.Team as NSString).utf8String, -1, nil)
-            sqlite3_bind_int(insertStmt, 10, Int32(data.Agree))
-            sqlite3_bind_int(insertStmt, 11, Int32(data.Megazine))
+            sqlite3_bind_text(insertStmt, 1, (data.employeeId as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 2, (data.employeePw as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 3, (data.employeeKanji as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 4, (data.employeeKana as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 5, (data.employeeEng as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 6, (data.tel as NSString).utf8String, -1, nil)
+            sqlite3_bind_int(insertStmt, 7, Int32(data.gender))
+            sqlite3_bind_text(insertStmt, 8, (data.position as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 9, (data.team as NSString).utf8String, -1, nil)
+            sqlite3_bind_int(insertStmt, 10, Int32(data.agree))
+            sqlite3_bind_int(insertStmt, 11, Int32(data.megazine))
          
-            if data.Memo == "" {
+            if data.memo == "" {
                 sqlite3_bind_null(insertStmt, 12)
             } else {
-                sqlite3_bind_text(insertStmt, 12, (data.Memo as NSString).utf8String, -1, nil)
+                sqlite3_bind_text(insertStmt, 12, (data.memo as NSString).utf8String, -1, nil)
             }
             
-            if data.RegisterDate == "" {
+            if data.registerDate == "" {
                 sqlite3_bind_null(insertStmt, 13)
             } else {
-                sqlite3_bind_text(insertStmt, 13, (data.RegisterDate as NSString).utf8String, -1, nil)
+                sqlite3_bind_text(insertStmt, 13, (data.registerDate as NSString).utf8String, -1, nil)
             }
                              
             if sqlite3_step(insertStmt) != SQLITE_DONE {
@@ -301,8 +301,8 @@ class DB {
             print("insert_position error: \(DBErrorMsg(db))")
         }
         
-            sqlite3_bind_text(insertStmt, 1, (data.PositionCode as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStmt, 2, (data.PositionName as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 1, (data.code as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 2, (data.name as NSString).utf8String, -1, nil)
         
             if sqlite3_step(insertStmt) != SQLITE_DONE {
                 //print("insert_position step error: \(DBErrorMsg(db))")
@@ -330,8 +330,8 @@ class DB {
                 return
             }
             
-            sqlite3_bind_text(insertStmt, 1, (data.TeamCode as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStmt, 2, (data.TeamName as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 1, (data.code as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStmt, 2, (data.name as NSString).utf8String, -1, nil)
             
             if sqlite3_step(insertStmt) != SQLITE_DONE {
                 //print("insert_team step error: \(DBErrorMsg(db))")
@@ -431,21 +431,21 @@ class DB {
             }
             
             let empV = Employee()
-            empV.EmployeeNum = empNum
-            empV.EmployeeId = empId
-            empV.EmployeePw = empPw
-            empV.EmployeeKanji = empKanji
-            empV.EmployeeKana = empKana
-            empV.EmployeeEng = empEng
-            empV.Tel = empTel
-            empV.Gender = empGender
-            empV.Position = empPosition
-            empV.Team = empTeam
-            empV.Agree = empAgree
-            empV.Megazine = empMegazine
-            empV.Memo = empMemo
-            empV.RegisterDate = empregisterDate
-            empV.ChangeDate = empChangeDate
+            empV.employeeNum = empNum
+            empV.employeeId = empId
+            empV.employeePw = empPw
+            empV.employeeKanji = empKanji
+            empV.employeeKana = empKana
+            empV.employeeEng = empEng
+            empV.tel = empTel
+            empV.gender = empGender
+            empV.position = empPosition
+            empV.team = empTeam
+            empV.agree = empAgree
+            empV.megazine = empMegazine
+            empV.memo = empMemo
+            empV.registerDate = empregisterDate
+            empV.changeDate = empChangeDate
             
             emps.append(empV)
         }
@@ -480,10 +480,10 @@ class DB {
             }
             
             let loginV = Login()
-            loginV.EmployeeNum = empNum
-            loginV.EmployeeId = empId
-            loginV.EmployeePw = empPw
-            loginV.LastLogin = lastDate
+            loginV.employeeNum = empNum
+            loginV.employeeId = empId
+            loginV.employeePw = empPw
+            loginV.lastLogin = lastDate
             
             logins.append(loginV)
         }
@@ -511,8 +511,8 @@ class DB {
             let positionName = String(describing: String(cString: sqlite3_column_text(selectStmt, 1)))
         
             let positionT = Position()
-            positionT.PositionCode = postionCode
-            positionT.PositionName = positionName
+            positionT.code = postionCode
+            positionT.name = positionName
             
             pos.append(positionT)
         }
@@ -539,8 +539,8 @@ class DB {
            
             
             let posV = Position()
-            posV.PositionCode = positionCode
-            posV.PositionName = positionName
+            posV.code = positionCode
+            posV.name = positionName
             
             pos.append(posV)
 
@@ -568,8 +568,8 @@ class DB {
             let teamName = String(describing: String(cString: sqlite3_column_text(selectStmt, 1)))
         
             let teamV = Team()
-            teamV.TeamCode = teamCode
-            teamV.TeamName = teamName
+            teamV.code = teamCode
+            teamV.name = teamName
             
             teams.append(teamV)
         }
@@ -594,8 +594,8 @@ class DB {
             
             
             let teamV = Team()
-            teamV.TeamCode = teamCode
-            teamV.TeamName = teamName
+            teamV.code = teamCode
+            teamV.name = teamName
             
             teams.append(teamV)
         }
@@ -606,7 +606,7 @@ class DB {
     //MARK: UPDATE
     func updateEmployee(employee:Employee) {
         let updateSql = """
-        UPDATE employee_tbl SET EMPLOYEE_KANJI = ?, EMPLOYEE_KANA = ?, EMPLOYEE_ENG = ?, TEL = ?, POSITION = ?, TEAM = ?, MEGAZINE = ?, MEMO = ?, CHANGE_DATE = ? WHERE EMPLOYEE_ID == '\(employee.EmployeeId)'
+        UPDATE employee_tbl SET EMPLOYEE_KANJI = ?, EMPLOYEE_KANA = ?, EMPLOYEE_ENG = ?, TEL = ?, POSITION = ?, TEAM = ?, MEGAZINE = ?, MEMO = ?, CHANGE_DATE = ? WHERE EMPLOYEE_ID == '\(employee.employeeId)'
 """
         var updateStmt:OpaquePointer? = nil
         
@@ -614,20 +614,20 @@ class DB {
             print("update_emp error: \(DBErrorMsg(db))")
         }
         
-        sqlite3_bind_text(updateStmt, 1, (employee.EmployeeKanji as NSString).utf8String, -1, nil)
-        sqlite3_bind_text(updateStmt, 2, (employee.EmployeeKana as NSString).utf8String, -1, nil)
-        sqlite3_bind_text(updateStmt, 3, (employee.EmployeeEng as NSString).utf8String, -1, nil)
-        sqlite3_bind_text(updateStmt, 4, (employee.Tel as NSString).utf8String, -1, nil)
-        sqlite3_bind_text(updateStmt, 5, (employee.Position as NSString).utf8String, -1, nil)
-        sqlite3_bind_text(updateStmt, 6, (employee.Team as NSString).utf8String, -1, nil)
-        sqlite3_bind_int(updateStmt, 7, Int32(employee.Megazine))
-        sqlite3_bind_text(updateStmt, 8, (employee.Memo as NSString).utf8String, -1, nil)
+        sqlite3_bind_text(updateStmt, 1, (employee.employeeKanji as NSString).utf8String, -1, nil)
+        sqlite3_bind_text(updateStmt, 2, (employee.employeeKana as NSString).utf8String, -1, nil)
+        sqlite3_bind_text(updateStmt, 3, (employee.employeeEng as NSString).utf8String, -1, nil)
+        sqlite3_bind_text(updateStmt, 4, (employee.tel as NSString).utf8String, -1, nil)
+        sqlite3_bind_text(updateStmt, 5, (employee.position as NSString).utf8String, -1, nil)
+        sqlite3_bind_text(updateStmt, 6, (employee.team as NSString).utf8String, -1, nil)
+        sqlite3_bind_int(updateStmt, 7, Int32(employee.megazine))
+        sqlite3_bind_text(updateStmt, 8, (employee.memo as NSString).utf8String, -1, nil)
         let nowDate = Date() //現在DATE
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy/MM/dd"
         let str = dateFormatter.string(from: nowDate) //dateをStringで変換
-        employee.ChangeDate = str
-        sqlite3_bind_text(updateStmt, 9, (employee.ChangeDate as NSString).utf8String, -1,  nil)
+        employee.changeDate = str
+        sqlite3_bind_text(updateStmt, 9, (employee.changeDate as NSString).utf8String, -1,  nil)
         
         if sqlite3_step(updateStmt) != SQLITE_DONE {
             print("update step error: \(DBErrorMsg(db))")
@@ -651,16 +651,16 @@ class DB {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy/MM/dd HH:mm"
         let str = dateFormatter.string(from: nowDate) //dateをStringで変換
-        loginId.LastLogin = str
+        loginId.lastLogin = str
         
-        sqlite3_bind_text(updateStmt, 1, (loginId.LastLogin as NSString).utf8String, -1, nil)
+        sqlite3_bind_text(updateStmt, 1, (loginId.lastLogin as NSString).utf8String, -1, nil)
        
         if sqlite3_step(updateStmt) != SQLITE_DONE {
             print("update_login step error: \(DBErrorMsg(db))")
             sqlite3_finalize(updateStmt)
         }
         sqlite3_finalize(updateStmt)
-        return loginId.LastLogin
+        return loginId.lastLogin
     }
     
     
@@ -686,10 +686,10 @@ class DB {
         for csvData in csvArray {
             let csvDetail = csvData.components(separatedBy: ",")
             let csvT = Login()
-            csvT.EmployeeNum = csvDetail[0]
-            csvT.EmployeeId = csvDetail[1]
-            csvT.EmployeePw = csvDetail[2]
-            csvT.LastLogin = csvDetail[3]
+            csvT.employeeNum = csvDetail[0]
+            csvT.employeeId = csvDetail[1]
+            csvT.employeePw = csvDetail[2]
+            csvT.lastLogin = csvDetail[3]
             csvv.append(csvT)
         }
     //    print("=======================================")
@@ -717,17 +717,17 @@ class DB {
             let csvDetail = csvData.components(separatedBy: ",")
             let csvT = Employee()
             let gender = Int(csvDetail[7])
-            csvT.EmployeeNum = csvDetail[0]
-            csvT.EmployeeId = csvDetail[1]
-            csvT.EmployeePw = csvDetail[2]
-            csvT.EmployeeKanji = csvDetail[3]
-            csvT.EmployeeKana = csvDetail[4]
-            csvT.EmployeeEng = csvDetail[5]
-            csvT.Tel = csvDetail[6]
-            csvT.Gender = gender!
-            csvT.Position = csvDetail[8]
-            csvT.Team = csvDetail[9]
-            csvT.RegisterDate = csvDetail[10]
+            csvT.employeeNum = csvDetail[0]
+            csvT.employeeId = csvDetail[1]
+            csvT.employeePw = csvDetail[2]
+            csvT.employeeKanji = csvDetail[3]
+            csvT.employeeKana = csvDetail[4]
+            csvT.employeeEng = csvDetail[5]
+            csvT.tel = csvDetail[6]
+            csvT.gender = gender!
+            csvT.position = csvDetail[8]
+            csvT.team = csvDetail[9]
+            csvT.registerDate = csvDetail[10]
             csvv.append(csvT)
         }
     //    print("=======================================")
@@ -754,8 +754,8 @@ class DB {
         for csvData in csvArray {
             let csvDetail = csvData.components(separatedBy: ",")
             let csvT = Position()
-            csvT.PositionCode = csvDetail[0]
-            csvT.PositionName = csvDetail[1]
+            csvT.code = csvDetail[0]
+            csvT.name = csvDetail[1]
             csvv.append(csvT)
         }
     //    print("=======================================")
@@ -782,8 +782,8 @@ class DB {
         for csvData in csvArray {
             let csvDetail = csvData.components(separatedBy: ",")
             let csvT = Team()
-            csvT.TeamCode = csvDetail[0]
-            csvT.TeamName = csvDetail[1]
+            csvT.code = csvDetail[0]
+            csvT.name = csvDetail[1]
             csvv.append(csvT)
         }
     //    print("=======================================")

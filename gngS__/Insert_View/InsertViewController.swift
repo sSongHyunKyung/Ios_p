@@ -25,6 +25,7 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
         /// キーボード関連終
         
         picker()
+        toolbars()
         
         pwTextField.isSecureTextEntry = true
         rePwTextField.isSecureTextEntry = true
@@ -48,6 +49,11 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
     var emps = Employee()
     var pos = DB.shared.selectPositionAll()
     var teams = DB.shared.selectTeamAll()
+    var alerts:Alerts!
+    var textToolbar:Toolbars!
+    var textToolbar2:Toolbars!
+    var textToolbar3:Toolbars!
+    var viewToolbar:ViewTollbars!
     
     //collection
     @IBOutlet private var textFields: [UITextField]!
@@ -66,7 +72,7 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
     @IBOutlet weak var engTextField: UITextField!
     @IBOutlet weak var FirstTelTextField: UITextField!
     @IBOutlet weak var SecondTelTextField: UITextField!
-    @IBOutlet weak var ThirdTextField: UITextField!
+    @IBOutlet weak var ThirdTelTextField: UITextField!
     
     @IBOutlet weak var manBtn: UIButton!
     @IBAction func manBtnAction(_ sender: Any) {
@@ -74,7 +80,7 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
             manBtn.tag = 2
             manBtn.setImage(UIImage(named: "radio_on"), for: .normal)
             girlBtn.setImage(UIImage(named: "radio_off"), for: .normal)
-            emps.Gender = 0
+            emps.gender = 0
             //print("============\(emps.Gender)============")
     }
     
@@ -83,7 +89,7 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
             girlBtn.tag = 1
             girlBtn.setImage(UIImage(named: "radio_on"), for: .normal)
             manBtn.setImage(UIImage(named: "radio_off"), for: .normal)
-            emps.Gender = 1
+            emps.gender = 1
            // print("============\(emps.Gender)============")
 
     }
@@ -94,10 +100,10 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
     @IBOutlet weak var megazineSwitch: UISwitch!
     @IBAction func megazineAction(_ sender: Any) {
         if megazineSwitch.isOn == true {
-            emps.Megazine = 1
+            emps.megazine = 1
            // print(emps.Megazine)
         } else if megazineSwitch.isOn == false {
-            emps.Megazine = 0
+            emps.megazine = 0
            // print(emps.Megazine)
         }
     }
@@ -107,13 +113,13 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
         if agreeBtn.tag == 0 {
             agreeBtn.tag = 100
             agreeBtn.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
-            emps.Agree = 1
+            emps.agree = 1
            // print("\(emps.Agree)")
 
         } else if agreeBtn.tag == 100 {
             agreeBtn.tag = 0
             agreeBtn.setImage(UIImage(systemName: "square"), for: .normal)
-            emps.Agree = 0
+            emps.agree = 0
           //  print("\(emps.Agree)")
         }
     }
@@ -124,7 +130,6 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
     //insertボタン
     @IBAction func insertBtn1(_ sender: Any) {
         
-        
         let id = idTextField.text!
         let Pw = pwTextField.text!
         let rePw = rePwTextField.text!
@@ -133,237 +138,164 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
         let eng = engTextField.text!
         let tel1 = FirstTelTextField.text!
         let tel2 = SecondTelTextField.text!
-        let tel3 = ThirdTextField.text!
-        let gender = emps.Gender
+        let tel3 = ThirdTelTextField.text!
+        let gender = emps.gender
         let position = positionTextField.text!
         let team = teamTextField.text!
-        let megazine = emps.Megazine
-        let agree = emps.Agree
+        let megazine = emps.megazine
+        let agree = emps.agree
         let memo = memoTextView.text!
   
         //MARK: バリデーションチェック
         
-        // _ID
+        // ID入力確認
         if id.isEmpty {
-            let alert = UIAlertController(title: "", message: "アカウントを入力ください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
+            alerts = Alerts(viewController: self, msg: "アカウントを入力ください", buttonTitle: "OK", handler: {(action) -> Void in})
+           // Alerts().showAlert(viewController: self, msg: "アカウントを入力ください", buttonTitle: "OK", handler:{(action) -> Void in})
             return
         }
-        
-        if !isValidEmail(id: id) {
-            let alert = UIAlertController(title: "", message: "メールの形で入力してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
+        // IDの正規式確認
+        if !Regex().isValidEmail(id: id) {
+            alerts = Alerts(viewController: self, msg: "メールの形で入力してください", buttonTitle: "OK", handler: {(action) -> Void in})
+            //Alerts().showAlert(viewController: self, msg: "メールの形で入力してください", buttonTitle: "OK", handler:{(action) -> Void in})
             return
         }
-        
-        
+        // ID重複確認
         if DB.shared.selectEmployeeID(employeeID: id) != nil {
-            let alert = UIAlertController(title: "", message: "他のメールのを入力してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
+            alerts = Alerts(viewController: self, msg: "他のメールのを入力してください", buttonTitle: "OK", handler: {(action) -> Void in})
+            //Alerts().showAlert(viewController: self, msg: "他のメールのを入力してください", buttonTitle: "OK", handler:{(action) -> Void in})
             return
         }
         
-        
-        
-        // _PW
+        // PW入力確認
         if Pw.isEmpty {
-            let alert = UIAlertController(title: "", message: "パスワードを入力ください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
+            alerts = Alerts(viewController: self, msg: "パスワードを入力ください", buttonTitle: "OK", handler: {(action) -> Void in})
+            //Alerts().showAlert(viewController: self, msg: "パスワードを入力ください", buttonTitle: "OK", handler:{(action) -> Void in})
+            return
+        }
+        // PWの正規式確認
+        if !Regex().isValidPassword(pwd: Pw) {
+            alerts = Alerts(viewController: self, msg: "パスワードの形で入力してください(ex:A!123456)", buttonTitle: "OK", handler: {(action) -> Void in})
+            //Alerts().showAlert(viewController: self, msg: "パスワードの形で入力してください(ex:A!123456)", buttonTitle: "OK", handler:{(action) -> Void in})
             return
         }
         
-        if !isValidPassword(pwd: Pw) {
-            let alert = UIAlertController(title: "", message: "メールの形で入力してください(ex:A!123456)", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        // _PW RE
+        // pwRE入力確認
         if rePw.isEmpty {
-            let alert = UIAlertController(title: "", message: "パスワードを確認してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
+            alerts = Alerts(viewController: self, msg: "パスワードを確認してください", buttonTitle: "OK", handler: {(action) -> Void in})
+            //Alerts().showAlert(viewController: self, msg: "パスワードを確認してください", buttonTitle: "OK", handler:{(action) -> Void in})
             return
         }
-        
+        // PwとrePwを確認
         if Pw != rePw {
-            let alert = UIAlertController(title: "", message: "パスワードをもう一度確認してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
+            alerts = Alerts(viewController: self, msg: "パスワードをもう一度確認してください", buttonTitle: "OK", handler: {(action) -> Void in})
+            //Alerts().showAlert(viewController: self, msg: "パスワードをもう一度確認してください", buttonTitle: "OK", handler:{(action) -> Void in})
             return
         }
         
-        //KANJI
+        //KANJI入力確認
         if kanji.isEmpty {
-            let alert = UIAlertController(title: "", message: "名前を入力ください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
+            alerts = Alerts(viewController: self, msg: "名前を入力ください", buttonTitle: "OK", handler: {(action) -> Void in})
+            //Alerts().showAlert(viewController: self, msg: "名前を入力ください", buttonTitle: "OK", handler:{(action) -> Void in})
+            return
+        }
+        //KANJIの正規式確認
+        if !Regex().Kanji(kanji) {
+            alerts = Alerts(viewController: self, msg: "漢字の形で入力してください", buttonTitle: "OK", handler: {(action) -> Void in})
+            //Alerts().showAlert(viewController: self, msg: "漢字の形で入力してください", buttonTitle: "OK", handler:{(action) -> Void in})
             return
         }
         
-        if !Kanji(kanji) {
-            let alert = UIAlertController(title: "", message: "漢字の形で入力してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        // _KANA
+        //KANA入力確認
         if kana.isEmpty {
-            let alert = UIAlertController(title: "", message: "名前を入力ください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
+            alerts = Alerts(viewController: self, msg: "名前を入力ください", buttonTitle: "OK", handler: {(action) -> Void in})
+            //Alerts().showAlert(viewController: self, msg: "名前を入力ください", buttonTitle: "OK", handler:{(action) -> Void in})
+            return
+        }
+        //KANAの正規式確認
+        if !Regex().Katakana(kana) {
+            alerts = Alerts(viewController: self, msg: "カナの形で入力してください", buttonTitle: "OK", handler: {(action) -> Void in})
+           // Alerts().showAlert(viewController: self, msg: "カナの形で入力してください", buttonTitle: "OK", handler:{(action) -> Void in})
             return
         }
         
-        if !Katakana(kana) {
-            let alert = UIAlertController(title: "", message: "カナの形で入力してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        // _ENG
+        //ENG入力確認
         if eng.isEmpty {
-            let alert = UIAlertController(title: "", message: "名前を入力ください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
+            alerts = Alerts(viewController: self, msg: "名前を入力ください", buttonTitle: "OK", handler: {(action) -> Void in})
+            //Alerts().showAlert(viewController: self, msg: "名前を入力ください", buttonTitle: "OK", handler:{(action) -> Void in})
+            return
+        }
+        //ENGの正規式確認
+        if !Regex().Eng(eng) {
+            alerts = Alerts(viewController: self, msg: "英語の形で入力してください", buttonTitle: "OK", handler: {(action) -> Void in})
+           // Alerts().showAlert(viewController: self, msg: "英語の形で入力してください", buttonTitle: "OK", handler:{(action) -> Void in})
             return
         }
         
-        if !Eng(eng) {
-            let alert = UIAlertController(title: "", message: "英語の形で入力してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        // _Tel
+        // Tel入力確認
         if tel1.isEmpty {
-            let alert = UIAlertController(title: "", message: "電話番号を入力ください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
+           alerts = Alerts(viewController: self, msg: "電話番号を入力ください", buttonTitle: "OK", handler: {(action) -> Void in})
+            //Alerts().showAlert(viewController: self, msg: "電話番号を入力ください", buttonTitle: "OK", handler:{(action) -> Void in})
             return
         }
-        
+        // Tel入力確認
         if tel2.isEmpty {
-            let alert = UIAlertController(title: "", message: "電話番号を入力ください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
+            alerts = Alerts(viewController: self, msg: "電話番号を入力ください", buttonTitle: "OK", handler: {(action) -> Void in})
+            //Alerts().showAlert(viewController: self, msg: "電話番号を入力ください", buttonTitle: "OK", handler:{(action) -> Void in})
             return
         }
-        
+        // Tel入力確認
         if tel3.isEmpty {
-            let alert = UIAlertController(title: "", message: "電話番号を入力ください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
+            alerts = Alerts(viewController: self, msg: "電話番号を入力ください", buttonTitle: "OK", handler: {(action) -> Void in})
+            //Alerts().showAlert(viewController: self, msg: "電話番号を入力ください", buttonTitle: "OK", handler:{(action) -> Void in})
             return
         }
         
-        // _Gender
+        // Gender入力確認
         if gender == 3 {
-           // print("Gender:値========================\(gender)")
-            let alert = UIAlertController(title: "", message: "性別を選択してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
+            alerts = Alerts(viewController: self, msg: "性別を選択してください", buttonTitle: "OK", handler: {(action) -> Void in})
+            //Alerts().showAlert(viewController: self, msg: "性別を選択してください", buttonTitle: "OK", handler:{(action) -> Void in})
             return
         }
         
-        
-        // _Position
+        // Position入力確認
         if position.isEmpty {
-            let alert = UIAlertController(title: "", message: "役職を選択してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
+            alerts = Alerts(viewController: self, msg: "役職を選択してください", buttonTitle: "OK", handler: {(action) -> Void in})
+           // Alerts().showAlert(viewController: self, msg: "役職を選択してください", buttonTitle: "OK", handler:{(action) -> Void in})
             return
         }
         
-        // _Team
+        // Team入力確認
         if team.isEmpty {
-            let alert = UIAlertController(title: "", message: "所属を選択してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
+            alerts = Alerts(viewController: self, msg: "所属を選択してください", buttonTitle: "OK", handler: {(action) -> Void in})
+            //Alerts().showAlert(viewController: self, msg: "所属を選択してください", buttonTitle: "OK", handler:{(action) -> Void in})
             return
         }
         
+        // agreeチェック確認
         if agree != 1 {
-            let alert = UIAlertController(title: "", message: "約款同意をしてください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
+            alerts = Alerts(viewController: self, msg: "約款同意をしてください", buttonTitle: "OK", handler: {(action) -> Void in})
+            //Alerts().showAlert(viewController: self, msg: "約款同意をしてください", buttonTitle: "OK", handler:{(action) -> Void in})
             return
         }
-        
         // end バリデーションチェック
 
         let empI = emps
-        empI.EmployeeId = id
-        empI.EmployeePw = Pw
-        empI.EmployeeKanji = kanji
-        empI.EmployeeKana = kana
-        empI.EmployeeEng = eng
-        empI.Tel = "\(tel1)-\(tel2)-\(tel3)"
-        empI.Gender = gender
-        empI.Position = position
-        empI.Team = team
-        empI.Megazine = megazine
-        empI.Agree = agree
-        empI.Memo = memo
+        empI.employeeId = id
+        empI.employeePw = Pw
+        empI.employeeKanji = kanji
+        empI.employeeKana = kana
+        empI.employeeEng = eng
+        empI.tel = "\(tel1)-\(tel2)-\(tel3)"
+        empI.gender = gender
+        empI.position = position
+        empI.team = team
+        empI.megazine = megazine
+        empI.agree = agree
+        empI.memo = memo
         if memo.isEmpty {
-            empI.Memo = "なし"
+            empI.memo = "なし"
         }
-        
-        //print("ID:\(id),PW:\(Pw),REPW:\(rePw),KANJI:\(kanji),KANA:\(kana),ENG:\(eng),TEL1:\(tel1),TEl2:\(tel2),TEl3:\(tel3),GENDER:\(gender),POSITION:\(position),TEMA:\(team),MAGAZINE:\(megazine),AGREE:\(agree),MEMO:\(memo)")
-        
-//        print("ID:\(empI.EmployeeId),PW:\(empI.EmployeePw)")
-//        print("KANJI:\(empI.EmployeeKanji),KANA:\(empI.EmployeeKana),ENG:\(empI.EmployeeEng)")
-//        print("TEl:\(empI.Tel),GENDER:\(empI.Gender)")
-//        print("TEMA:\(empI.Team),POSITION:\(empI.Position)")
-//        print("MAGAZINE:\(empI.Megazine),AGREE:\(empI.Agree),MEMO:\(empI.Memo)")
         
         //VC連結data移動
         guard let inputVc = self.storyboard?.instantiateViewController(withIdentifier: "InputViewController") as? InputViewController else {return}
@@ -373,7 +305,6 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
             //tabbarChagne
             self.tabBarController!.selectedIndex = 0
             //insertView 生成　self.ViewDidLoad()また始める
-            //self.loadView()
             self.idTextField.text = ""
             self.pwTextField.text = ""
             self.rePwTextField.text = ""
@@ -382,7 +313,7 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
             self.engTextField.text = ""
             self.FirstTelTextField.text = ""
             self.SecondTelTextField.text = ""
-            self.ThirdTextField.text = ""
+            self.ThirdTelTextField.text = ""
             self.girlBtn.setImage(UIImage(named: "radio_off"), for: .normal)
             self.manBtn.setImage(UIImage(named: "radio_off"), for: .normal)
             self.positionTextField.text = ""
@@ -396,284 +327,25 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
         self.present(inputVc, animated: true, completion: nil)
     }
     
-    
-    // MARK: Insertボタン２
+    //insertBtn2
     @IBOutlet weak var insertBtn2: UIButton!
-    @IBAction func insertBtn2(_ sender: Any) {
-        
-        let id = idTextField.text!
-        let Pw = pwTextField.text!
-        let rePw = rePwTextField.text!
-        let kanji = kanjiTextField.text!
-        let kana = kanaTextField.text!
-        let eng = engTextField.text!
-        let tel1 = FirstTelTextField.text!
-        let tel2 = SecondTelTextField.text!
-        let tel3 = ThirdTextField.text!
-        let gender = emps.Gender
-        let position = positionTextField.text!
-        let team = teamTextField.text!
-        let megazine = emps.Megazine
-        let agree = emps.Agree
-        let memo = memoTextView.text!
-  
-        //MARK: バリデーションチェック２
-        
-        // _ID
-        if id.isEmpty {
-            let alert = UIAlertController(title: "", message: "アカウントを入力ください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        if !isValidEmail(id: id) {
-            let alert = UIAlertController(title: "", message: "メールの形で入力してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        
-        if DB.shared.selectEmployeeID(employeeID: id) != nil {
-            let alert = UIAlertController(title: "", message: "他のメールのを入力してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        
-        
-        // _PW
-        if Pw.isEmpty {
-            let alert = UIAlertController(title: "", message: "パスワードを入力ください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        if !isValidPassword(pwd: Pw) {
-            let alert = UIAlertController(title: "", message: "メールの形で入力してください(ex:A!123456)", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        // _PW RE
-        if rePw.isEmpty {
-            let alert = UIAlertController(title: "", message: "パスワードを確認してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        if Pw != rePw {
-            let alert = UIAlertController(title: "", message: "パスワードをもう一度確認してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        //KANJI
-        if kanji.isEmpty {
-            let alert = UIAlertController(title: "", message: "名前(漢字)を入力ください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        if !Kanji(kanji) {
-            let alert = UIAlertController(title: "", message: "漢字の形で入力してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        // _KANA
-        if kana.isEmpty {
-            let alert = UIAlertController(title: "", message: "名前(カナ)を入力ください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        if !Katakana(kana) {
-            let alert = UIAlertController(title: "", message: "カナの形で入力してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        // _ENG
-        if eng.isEmpty {
-            let alert = UIAlertController(title: "", message: "名前(英語)を入力ください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        if !Eng(eng) {
-            let alert = UIAlertController(title: "", message: "英語の形で入力してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        // _Tel
-        if tel1.isEmpty {
-            let alert = UIAlertController(title: "", message: "電話番号を入力ください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        if tel2.isEmpty {
-            let alert = UIAlertController(title: "", message: "電話番号を入力ください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        if tel3.isEmpty {
-            let alert = UIAlertController(title: "", message: "電話番号を入力ください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        // _Gender
-        if gender == 3 {
-          //  print("Gender:値========================\(gender)")
-            let alert = UIAlertController(title: "", message: "性別を選択してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        
-        // _Position
-        if position.isEmpty {
-            let alert = UIAlertController(title: "", message: "役職を選択してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        // _Team
-        if team.isEmpty {
-            let alert = UIAlertController(title: "", message: "所属を選択してください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
-        if agree != 1 {
-            let alert = UIAlertController(title: "", message: "約款同意をしてください", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            })
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        // end バリデーションチェック
-        let empI = emps
-        empI.EmployeeId = id
-        empI.EmployeePw = Pw
-        empI.EmployeeKanji = kanji
-        empI.EmployeeKana = kana
-        empI.EmployeeEng = eng
-        empI.Tel = "\(tel1)-\(tel2)-\(tel3)"
-        empI.Gender = gender
-        empI.Position = position
-        empI.Team = team
-        empI.Megazine = megazine
-        empI.Agree = agree
-        empI.Memo = memo
-        if memo.isEmpty {
-            empI.Memo = "なし"
-        }
-        
-        guard let inputVc = self.storyboard?.instantiateViewController(withIdentifier: "InputViewController") as? InputViewController else {return}
-        inputVc.empII = empI
-        inputVc.didSave = {
-            //tabbarChagne
-            self.tabBarController!.selectedIndex = 0
-            //insertView 生成　self.ViewDidLoad()また始める
-            //self.loadView()
-            self.idTextField.text = ""
-            self.pwTextField.text = ""
-            self.rePwTextField.text = ""
-            self.kanjiTextField.text = ""
-            self.kanaTextField.text = ""
-            self.engTextField.text = ""
-            self.FirstTelTextField.text = ""
-            self.SecondTelTextField.text = ""
-            self.ThirdTextField.text = ""
-            self.girlBtn.setImage(UIImage(named: "radio_off"), for: .normal)
-            self.manBtn.setImage(UIImage(named: "radio_off"), for: .normal)
-            self.positionTextField.text = ""
-            self.teamTextField.text = ""
-            self.megazineSwitch.isOn = false
-            self.agreeBtn.setImage(UIImage(systemName: "square"), for: .normal)
-            self.memoTextView.text = ""
-            self.scrollView.contentOffset.y = 0
-        }
-        inputVc.modalPresentationStyle = .fullScreen
-        self.present(inputVc, animated: true, completion: nil)
-    }
     
     //MARK: PickerView
     
     //pickerViewFieldAction
     @IBAction func posFieldAction(_ sender: Any) {
-        posPicker.selectRow(posRow(code: positionTextField.text!), inComponent: 0, animated: true)
+        pickerPosition.selectRow(Change().posRow(code: positionTextField.text!), inComponent: 0, animated: true)
     }
     
     @IBAction func teamFieldAction(_ sender: Any) {
-        teamPicker.selectRow(teamRow(code: teamTextField.text!), inComponent: 0, animated: false)
+        pickerTeam.selectRow(Change().teamRow(code: teamTextField.text!), inComponent: 0, animated: false)
     }
     
     //PickerView フォルパティ
     var posPicker:UIPickerView = UIPickerView()
     var teamPicker:UIPickerView = UIPickerView()
+    var pickerPosition:PickerViews!
+    var pickerTeam:PickerViews!
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -693,201 +365,30 @@ class InsertViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDa
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch pickerView.tag {
         case 1:
-            return pos[row].PositionName
+            return pos[row].name
         case 2:
-            return teams[row].TeamName
+            return teams[row].name
         default:
             return "EEROR"
         }
     }
         
-    
     //pickerView 設定 (pickerView + toolbar)
     func picker() {
-        
-        //posPicker = pickerView + textField
-        posPicker.tag = 1
-        posPicker.delegate = self
-        posPicker.dataSource = self
-        positionTextField.inputView = posPicker
-        
-        //teamPicker = pickerView + textField
-        teamPicker.tag = 2
-        teamPicker.delegate = self
-        teamPicker.dataSource = self
-        teamTextField.inputView = teamPicker
-        
-        // 選択行をハイライト
-        posPicker.showsSelectionIndicator = true
-        teamPicker.showsSelectionIndicator = true
-        // 決定・キャンセル用ツールバーの生成
-        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
-        let spaceItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        let doneItem = UIBarButtonItem(title:"決定", style: .done, target: self, action: #selector(done))
-        let cancelItem = UIBarButtonItem(title:"キャンセル", style: .done, target: self, action: #selector(cancel))
-        toolbar.setItems([cancelItem, spaceItem, doneItem], animated: true)
-        
-        
-        
-        let toolbar2 = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
-        let spaceItem2 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        let doneItem2 = UIBarButtonItem(title:"決定", style: .done, target: self, action: #selector(done2))
-        let cancelItem2 = UIBarButtonItem(title:"キャンセル", style: .done, target: self, action: #selector(cancel2))
-        toolbar2.setItems([cancelItem2, spaceItem2, doneItem2], animated: true)
-        
-        let toolbar3 = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
-        let spaceItem3 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        let doneItem3 = UIBarButtonItem(title:"完了", style: .done, target: self, action: #selector(done3))
-        toolbar3.setItems([spaceItem3, doneItem3], animated: true)
-        
-        // toolbar 実装
-        positionTextField.inputAccessoryView = toolbar
-        teamTextField.inputAccessoryView = toolbar2
-        memoTextView.inputAccessoryView = toolbar3
-        
+        pickerPosition = PickerViews(items: self.pos, textField: positionTextField)
+        pickerTeam = PickerViews(items: self.teams, textField: teamTextField)
     }
     
-    // 決定ボタンのアクション指定
-    @objc func done() {
-        positionTextField.endEditing(true)
-        positionTextField.text = "\(pos[posPicker.selectedRow(inComponent: 0)].PositionName)"
-        //print("============\(pos[posPicker.selectedRow(inComponent: 0)].PositionName)=========")
+    //MARK: Toolbars
+    func toolbars() {
+        textToolbar = Toolbars(textField: FirstTelTextField)
+        textToolbar2 = Toolbars(textField: SecondTelTextField)
+        textToolbar3 = Toolbars(textField: ThirdTelTextField)
+        
+        viewToolbar = ViewTollbars(textView: memoTextView)
     }
-    // キャンセルボタンのアクション指定
-    @objc func cancel(){
-        positionTextField.endEditing(true)
-        //print("-------------------\(positionTextField.text!)----------------------")
+    
 
-    }
-    @objc func done2() {
-        teamTextField.endEditing(true)
-        teamTextField.text = "\(teams[teamPicker.selectedRow(inComponent: 0)].TeamName)"
-        //print("\(teams[teamPicker.selectedRow(inComponent: 0)].TeamName)")
-    }
-    // キャンセルボタンのアクション指定
-    @objc func cancel2(){
-        teamTextField.endEditing(true)
-        //print("-----------\(teamTextField.text!)---------------")
-    }
-    
-    @objc func done3() {
-        memoTextView.endEditing(true)
-    }
-    
-    
-    //MARK: 外関数
-    func returnPosition(code:String) -> String {
-        for position in pos {
-            if code == position.PositionCode {
-                return position.PositionName
-            }
-        }
-        return ""
-    }
-    
-    func returnPosition2(code:String) -> String {
-        for postion in pos {
-            if code == postion.PositionName {
-                return postion.PositionCode
-            }
-        }
-        return ""
-    }
-    
-    func returnTeam(code:String) -> String {
-        for team in teams {
-            if code == team.TeamCode {
-                return team.TeamName
-            }
-        }
-        return ""
-    }
-    
-    func returnTeam2(code:String) -> String {
-        for team in teams {
-            if code == team.TeamName {
-                return team.TeamCode
-            }
-        }
-        return ""
-    }
-
-    func posRow(code:String) -> Int {
-        var row:Int = 0
-        
-        if code == "社員" {
-            row = 0
-            return row
-        } else if code == "主任" {
-            row = 1
-            return row
-        } else if code == "課長" {
-            row = 2
-            return row
-        } else if code == "次長" {
-            row = 3
-            return row
-        } else if code == "部長" {
-            row = 4
-            return row
-        } else if code == "代表" {
-            row = 5
-            return row
-        }
-        return row
-    }
-    
-    func teamRow(code:String) -> Int {
-        var rows:Int = 0
-        if code == "第1チーム" {
-            rows = 0
-            return rows
-        } else if code == "第2チーム" {
-            rows = 1
-            return rows
-        } else if code == "第3チーム" {
-            rows = 2
-            return rows
-        } else if code == "第4チーム" {
-            rows = 3
-            return rows
-        }
-        return rows
-    }
-    
-    //MARK: 正規式
-    //メール
-    func isValidEmail(id: String) -> Bool {
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
-        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
-        return emailTest.evaluate(with: id)
-    }
-    // パスワード
-    func isValidPassword(pwd: String) -> Bool {
-        let passwordRegEx = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+=-]).{8,24}"
-        let passwordTest = NSPredicate(format: "SELF MATCHES %@", passwordRegEx)
-        return passwordTest.evaluate(with: pwd)
-    }
-    //漢字
-    func Kanji(_ str: String) -> Bool {
-        let regex = "^[\u{3005}\u{3007}\u{303b}\u{3400}-\u{9fff}\u{f900}-\u{faff}\u{20000}-\u{2ffff}ぁ-ゔァ-ヴー]+$"
-        let predicate = NSPredicate(format:"SELF MATCHES %@", regex)
-        return predicate.evaluate(with: str)
-    }
-    //カナ
-    func Katakana(_ str: String) -> Bool {
-        let regex = "^[ァ-ヾ]+$"
-        let predicate = NSPredicate(format:"SELF MATCHES %@", regex)
-        return predicate.evaluate(with: str)
-    }
-    //英語
-    func Eng(_ str: String) -> Bool {
-        let regex = "^[a-zA-Z]*$"
-        let predicate = NSPredicate(format:"SELF MATCHES %@", regex)
-        return predicate.evaluate(with: str)
-    }
-    
-    
     //MARK: キーボード
     /// 編集中のテキストフィールド
     private var editingTextField: UITextField?
@@ -1003,11 +504,43 @@ extension InsertViewController: UITextFieldDelegate {
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        // 改行キーが入力された時に実行される処理。
-        // キーボードを下げる。
-        view.endEditing(true)
-        // 改行コードは入力しない。
-        return false
+        
+        if textField == idTextField {
+            pwTextField.becomeFirstResponder()
+        } else {
+            pwTextField.resignFirstResponder()
+        }
+        
+        if textField == pwTextField {
+            rePwTextField.becomeFirstResponder()
+        } else {
+            rePwTextField.resignFirstResponder()
+        }
+       
+        if textField == rePwTextField {
+            kanjiTextField.becomeFirstResponder()
+        } else {
+            kanjiTextField.resignFirstResponder()
+        }
+        
+        if textField == kanjiTextField {
+            kanaTextField.becomeFirstResponder()
+        } else {
+            kanaTextField.resignFirstResponder()
+        }
+        
+        if textField == kanaTextField {
+            engTextField.becomeFirstResponder()
+        } else {
+            engTextField.resignFirstResponder()
+        }
+        
+        if textField == engTextField {
+            FirstTelTextField.becomeFirstResponder()
+        } else {
+            FirstTelTextField.resignFirstResponder()
+        }
+        return true
     }
 }
 extension InsertViewController: UITextViewDelegate {
@@ -1038,9 +571,9 @@ extension InsertViewController: UIScrollViewDelegate {
 //        print("====screenHeight============\(screenHeight)===============")
 //        let length = scrollHeight - screenHeight
 //        print("=============length==============\(length)======================")
-        if offsetY < 560 {
+        if offsetY < 370 {
             insertBtn2.isHidden = true
-        } else if offsetY > 562 {
+        } else if offsetY > 369 {
             insertBtn2.isHidden = false
         }
     }
@@ -1058,72 +591,45 @@ extension InsertViewController: UIScrollViewDelegate {
         }
         
         //英語,数字,@,-,_,.のみ入力 or Tel= 数字のみ//
-        switch(textField.text) {
-        
-        case idTextField.text:
-                let allowedCharacters = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_@-.") // 入力可能な文字
-                guard string.rangeOfCharacter(from: allowedCharacters) != nil else { return false }
-        case pwTextField.text:
-                let numChar = CharacterSet(charactersIn: "")
-                guard string.rangeOfCharacter(from: numChar) == nil else { return false }
-        case rePwTextField.text:
-                let numChar = CharacterSet(charactersIn: "")
-                guard string.rangeOfCharacter(from: numChar) == nil else { return false }
-        case kanjiTextField.text:
-                let numChar = CharacterSet(charactersIn: "1234567890")
-                guard string.rangeOfCharacter(from: numChar) == nil else { return false }
-        case kanaTextField.text:
-                let numChar = CharacterSet(charactersIn: "1234567890")
-                guard string.rangeOfCharacter(from: numChar) == nil else { return false }
-        case engTextField.text:
-                let numChar = CharacterSet(charactersIn: "1234567890")
-                guard string.rangeOfCharacter(from: numChar) == nil else { return false }
-        case FirstTelTextField.text:
-                let numChar = CharacterSet(charactersIn: "1234567890")
-                guard string.rangeOfCharacter(from: numChar) != nil else { return false }
-        case SecondTelTextField.text:
-                let numChar = CharacterSet(charactersIn: "1234567890")
-                guard string.rangeOfCharacter(from: numChar) != nil else { return false }
-        case ThirdTextField.text:
-                let numChar = CharacterSet(charactersIn: "1234567890")
-                guard string.rangeOfCharacter(from: numChar) != nil else { return false }
-            default:
-                break
-        }
-        
-        
-        
         //TextField Length制限
         var maxLength:Int = 0
         
         switch (textField.text) {
         case idTextField.text: //ID
             maxLength = 30
-        
+            let allowedCharacters = CharacterSet(charactersIn:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_@-.") // 入力可能な文字
+            guard string.rangeOfCharacter(from: allowedCharacters) != nil else { return false }
+            break
         case pwTextField.text: //PW
             maxLength = 30
-            
+            break
         case rePwTextField.text: //REPW
             maxLength = 30
-            
+            break
         case kanjiTextField.text: //KANJI
             maxLength = 30
-            
+            break
         case kanaTextField.text: //KANA
             maxLength = 30
-            
+            break
         case engTextField.text: //ENG
             maxLength = 30
-            
+            break
         case FirstTelTextField.text: //TEL1
             maxLength = 4
-            
+            let numChar = CharacterSet(charactersIn:"1234567890").inverted
+            guard string.rangeOfCharacter(from: numChar) == nil else { return false }
+            break
         case SecondTelTextField.text: //TEL2
             maxLength = 4
-            
-        case ThirdTextField.text: //TEL3
+            let numChar = CharacterSet(charactersIn:"1234567890").inverted
+            guard string.rangeOfCharacter(from: numChar) == nil else { return false }
+            break
+        case ThirdTelTextField.text: //TEL3
             maxLength = 4
-         
+            let numChar = CharacterSet(charactersIn:"1234567890").inverted
+            guard string.rangeOfCharacter(from: numChar) == nil else { return false }
+            break
         default:
             break
         }
@@ -1135,6 +641,3 @@ extension InsertViewController: UIScrollViewDelegate {
     }
     
 }
-
-
-

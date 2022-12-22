@@ -2,10 +2,8 @@ import Foundation
 
 
 class Login {
-    var EmployeeNum:String = "" //PK
-    var EmployeeId:String = "" //UK
-    var EmployeePw:String = ""
-    var LastLogin:String = ""
+    var employeeNum:String = "" //PK 社員番号
+    var employeeId:String = "" //UK ID
+    var employeePw:String = "" //Password
+    var lastLogin:String = "" // ログインん時間
 }
-
-

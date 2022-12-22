@@ -7,7 +7,6 @@ class ListViewController: UIViewController,UITableViewDelegate, UITableViewDataS
     var posDB = DB.shared.selectPosition()
     var teamDB = DB.shared.selectTeam()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         ListTableView.dataSource = self
@@ -28,10 +27,10 @@ class ListViewController: UIViewController,UITableViewDelegate, UITableViewDataS
             fatalError("Dequeue failed: AnimalTableViewCell.")
         }
         //row値
-        cell.numLabel.text = empDB[indexPath.row].EmployeeNum
-        cell.nameLabel.text = empDB[indexPath.row].EmployeeKanji
-        cell.positionLabel.text = posDB[indexPath.row].PositionName
-        cell.teamLabel.text = teamDB[indexPath.row].TeamName
+        cell.numLabel.text = empDB[indexPath.row].employeeNum
+        cell.nameLabel.text = empDB[indexPath.row].employeeKanji
+        cell.positionLabel.text = posDB[indexPath.row].name
+        cell.teamLabel.text = teamDB[indexPath.row].name
         
         return cell
     }
